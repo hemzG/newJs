@@ -4,13 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href="style.css" rel="stylesheet"/>
   <script defer src = "index.js"></script>
 </head>
 
 <body>
   <h1>Blogs</h1>
-  <div>
-    <button type="button" class="btn btn-primary">Create New Post</button>
+  <div id="create_btn">
+    <button type="button"  class="btn btn-primary">Create New Post</button>
   </div>
   <div class="container">
     <table class="table table-striped">
@@ -19,9 +20,8 @@
           <th>S.No.</th>
           <th>Created at</th>
           <th>Title</th>
-          <th>Image</th>
-          <th>Actions
-          </th>
+          <th>Image </th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody id="tableBlogBody">
