@@ -7,3 +7,47 @@ h1{
     font-size: 40px;
     text-align: center;
 }
+.controls a{
+  padding: 3px;
+  border: 1px solid black;
+  margin: 2px;
+  color: black;
+  text-decoration: none;
+}
+.active{
+  background: purple;
+  color: white !important;
+}
+
+#loading {
+  width: 2rem;
+  height: 2rem;
+  border: 5px solid #f3f3f3;
+  border-top: 6px solid #9c41f2;
+  border-radius: 100%;
+  margin: auto;
+  visibility: hidden;
+  animation: spin 1s infinite linear;
+}
+#loading.display {
+  visibility: visible;
+}
+@keyframes spin {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(360deg);
+  }
+}
+#searchDiv{
+  margin-left: 50px;
+}
+#myInput {
+
+  width: 20%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}

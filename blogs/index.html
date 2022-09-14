@@ -13,11 +13,15 @@
   <div id="create_btn">
     <button type="button"  class="btn btn-primary">Create New Post</button>
   </div>
+  <div id="searchDiv">
+    <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search...">
+  </div>
+  <div id="loading"></div>
   <div class="container">
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>S.No.</th>
+          <th>Id</th>
           <th>Created at</th>
           <th>Title</th>
           <th>Image </th>
@@ -28,6 +32,10 @@
       </tbody>
     </table>
   </div>
+  <div id ="control" class="controls">
+  </div>
+  <input id="currentpage" type=hidden />
+  
 </body>
 
 </html>
