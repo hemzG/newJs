@@ -14,7 +14,13 @@
     <button type="button"  class="btn btn-primary">Create New Post</button>
   </div>
   <div id="searchDiv">
-    <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search...">
+    <input type="text" id="myInput" onkeyup="processChange()" placeholder="Search...">    
+    <label>Sort By : </label>
+    <select id="sortBy" onchange="mySort(this)">
+    <option value="">SELECT</option>
+    <option value="id">Id</option>
+    <option value="createdAt">Created At</option>
+    </select>
   </div>
   <div id="loading"></div>
   <div class="container">
