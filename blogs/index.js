@@ -2,11 +2,12 @@ let start=1;
 let show_per_page = 5;
 let itemSize;
 var prevBit=false;
+var nextBit=false;
+var  firstBit = false;
 const loader = document.querySelector("#loading");
 function displayLoading() {
     loader.classList.add("display");
 }
-
 function hideLoading() {
     loader.classList.remove("display");
 }
@@ -31,6 +32,7 @@ function fetchSize() {
   var btn_elements;
   var navigation_links;
   var current_link;
+
 function myNews(show_per_page) {
   
   number_of_pages = Math.ceil(itemSize/show_per_page);
@@ -38,104 +40,95 @@ let cp = document.getElementById("currentpage");
   cp.value=0;
   
 
- navigation_links = `<a class="prev" onclick="previous();">Previous</a>`;
+ navigation_links = `<a class="prev pagination" onclick="previous();">Previous</a>`;
  current_link = 0;
 while (number_of_pages > current_link) {
-    navigation_links += `<a class="page" id="${current_link+1}" onclick="page_range(this);"moveHover="' + ${current_link}+ "'>`+ (current_link + 1) +  `</a>`;
+    navigation_links += `<a class="page pagination" id="${current_link+1}" onclick="page_range(this);">`+ (current_link + 1) +  `</a>`;
     current_link++;
   }
 
-navigation_links += `<a class="next" onclick="next();">Next</a>`;
+navigation_links += `<a class="next pagination" onclick="next();">Next</a>`;
 controlClass= document.getElementById("control");
 controlClass.innerHTML = navigation_links;
-//console.log(controlClass);
+var ss = document.getElementsByClassName("active");
+if(ss.length == 0){
+ console.log("chck active");
 btn_elements = document.getElementsByClassName("page");
-//console.log(btn_elements);
 btn_elements[0].classList.add("active");
+firstBit = true;
+}
+fetchBlogs();
 }
 function previous(){
   if(start!= 1){
     clearTable();
     start--;
-    var ss = document.getElementsByClassName("active");
-    var chkId = ss[0].id;
-    chkId--;
-    ss[0].classList.remove("active");
-    var prev_btn=document.getElementsByClassName("controls");
-//console.log(nxt_btn);
+    nextBit=true;
+   // var ss = document.getElementsByClassName("active");
+    //var chkId = ss[0].id;
+   // chkId--;
+   // ss[0].classList.remove("active");
+   // var prev_btn=document.getElementsByClassName("controls");
 
-prev_btn[0].children[chkId].classList.add("active");
+//prev_btn[0].children[chkId].classList.add("active");
    fetchBlogs();
   }
-//   let newPage = parseInt(cp.val(), 0) - 1;
-// console.log(newPage);
-//   if ($('.active').prev('.page').length == true) {
-//     page_range(newPage);
- // }
 
 }
 function next(){
 if(start<number_of_pages){
   clearTable();
   start++;
-  var ss = document.getElementsByClassName("active");
-  var chkId = ss[0].id;
-  chkId++;
-  ss[0].classList.remove("active");
-var nxt_btn=document.getElementsByClassName("controls");
-console.log(nxt_btn);
+  nextBit = true;
+  //var ss = document.getElementsByClassName("active");
+  //var chkId = ss[0].id;
+ // chkId++;
+  //ss[0].classList.remove("active");
+//var nxt_btn=document.getElementsByClassName("controls");
+//console.log(nxt_btn);
 
-nxt_btn[0].children[chkId].classList.add("active");
+//nxt_btn[0].children[chkId].classList.add("active");
   fetchBlogs();
 }
 }
 
 function page_range(xy){
   console.log(xy.id);
-  var ss = document.getElementsByClassName("active");
-  ss[0].classList.remove("active");
-  xy.classList.add("active");
+  //var ss = document.getElementsByClassName("active");
+  //ss[0].classList.remove("active");
+ // xy.classList.add("active");
   start = xy.id;
+  nextBit = true;
   clearTable();
   fetchBlogs();
-
-
-
 }
-//var myLink= location.href;
-//var newLink= myLink+`?page=${start}&limit=${end}`;
-//console.log(newLink);
-//location = newLink;
-//var stop =false;
-fetchBlogs();
+
+
 function fetchBlogs() {
-  //controlClass= document.getElementById("control");
- // btn_elements = document.getElementsByClassName("page");
-//console.log(btn_elements.length);
-//btn_elements[0].classList.add("active");
-displayLoading(); 
+displayLoading();
+
+if(!nextBit){
+  //console.log(location.search.length);
+  if(location.search.length){
+    
+var pageLOC=location.search[6];
+if(pageLOC.isInteger)
+start = pageLOC;
+console.log(location.search[6]);
+  }
+}
+
+
  // var queryURL = "https://631f09a058a1c0fe9f5e599a.mockapi.io/blogs/";
    var queryURL = "https://631f09a058a1c0fe9f5e599a.mockapi.io/blogs/"+`?page=${start}&limit=${show_per_page}`;
-   //console.log(document.location );
-   
+  
    var newurl = document.location.pathname +`?page=${start}&limit=${show_per_page}`;
-  var cc = `?page=${start}&limit=${show_per_page}`;
-   //console.log(cc);
+   var cc = `?page=${start}&limit=${show_per_page}`;
+   
    var nxtstate={};
    var nxtTitle ="";
    window.history.pushState(nxtstate,nxtTitle,newurl);
-  // console.log(newurl);
-  // console.log(location.search);
-  //  if (location.search!= cc){
-  //  window.history.pushState(nxtstate,nxtTitle,newurl);
-
-  //   console.log("hellOOO");
-  //   }
-  //   if (location.search== cc){
-  //     window.history.pushState(nxtstate,nxtTitle,newurl);
-
-  //     console.log("hell");
-  //     }
+  
     fetch(queryURL)
       .then(function(response) {
         return response.json();
@@ -143,15 +136,28 @@ displayLoading();
       .then(function(blogs) {
         console.log(blogs);
         hideLoading();
+        var ss = document.getElementsByClassName("active");
+        console.log(ss[0]);
+        ss[0].classList.remove("active");
+        var nxt_btn=document.getElementsByClassName("controls");
+        console.log(start);
+        nxt_btn[0].children[start].classList.add("active");
         buildTable(blogs);
+        nextBit=false;
+        firstBit = false;
       })
       .catch(function(error) {
         console.log("Error during fetch: " + error.message);
+        var tableBodyError = document.getElementById("full");
+        tableBodyError.style.display="none";
+        console.log(tableBodyError);
+        var errorElement = document.getElementById("error");
+        errorElement.textContent = "Error during fetch: " + `"${error.message}."`;
+
       });
       
   }
   let sno= 0;
-  
   
   function buildTable(blogs) {
     blogs.forEach(function(curr) {
@@ -171,19 +177,13 @@ displayLoading();
     var titles = newRow.insertCell();
     titles.innerHTML = title;
     var images = newRow.insertCell();
-    images.innerHTML = `<img src=${image} width="100" height="100">`;
+    images.innerHTML = `<img src=${image} width="80" height="80">`;
     var actions=newRow.insertCell();
     actions.innerHTML=`<a href="view.html?id=${ids}">View</a> <a onclick='deleteDialog(this);' id=${ids}>Delete</a>`;
   
   }
   
-/*function viewEachId(uu){
-  console.log(uu.id);
-  sessionStorage.setItem("id", uu.id);
-  location.href='view.html';
-   
 
-}*/
 function deleteDialog(uu){
   //console.log(uu.id);
   var idd=uu.id;
@@ -222,6 +222,7 @@ function searchFunction(){
    // document.getElementById("myInput").disabled = true;
 
   var filter = input.value;
+  
   //var searchUrl = "https://631f09a058a1c0fe9f5e599a.mockapi.io/blogs/"+`?page=${start}&limit=${show_per_page}`+`&search=${filter}`;
 var searchUrl = "https://631f09a058a1c0fe9f5e599a.mockapi.io/blogs/"+`?search=${filter}`;
 //console.log(searchUrl);

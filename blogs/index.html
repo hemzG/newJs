@@ -10,10 +10,12 @@
 
 <body>
   <h1>Blogs</h1>
+  <hr>
+  <h3 id="error"></h3>
+  <div id="full">
   <div id="create_btn">
     <button type="button"  class="btn btn-primary">Create New Post</button>
-  </div>
-  <div id="searchDiv">
+  
     <input type="text" id="myInput" onkeyup="processChange()" placeholder="Search...">    
     <label>Sort By : </label>
     <select id="sortBy" onchange="mySort(this)">
@@ -24,7 +26,7 @@
   </div>
   <div id="loading"></div>
   <div class="container">
-    <table class="table table-striped">
+    <table id = "mytable" class="table table-striped table-bordered table-hover">
       <thead>
         <tr>
           <th>Id</th>
@@ -37,11 +39,12 @@
       <tbody id="tableBlogBody">
       </tbody>
     </table>
+    
   </div>
-  <div id ="control" class="controls">
+  <div id ="control" class="controls ">
   </div>
   <input id="currentpage" type=hidden />
-  
+</div>
 </body>
 
 </html>
