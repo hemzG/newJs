@@ -108,11 +108,8 @@ var sortValue="";
 var sortBit = false;
 
 function fetchBlogs() {
-
 displayLoading();
-
 if(!nextBit){
-  //console.log(location.search.length);
   if(location.search.length){
     console.log(location.search);
     var pageLOC =location.search;
@@ -121,7 +118,7 @@ if(!nextBit){
     console.log(slicestring);
     var mystring = slicestring[1];
 
-var equalaftr= mystring.split("=",2);
+var equalaftr= mystring.split("=",4);
 console.log(equalaftr);
 if(equalaftr[0]=="page"){
   console.log("page");
@@ -129,6 +126,28 @@ if(equalaftr[0]=="page"){
  var finalPage= pages[0];
  console.log(finalPage);
  start = finalPage;
+
+ if(equalaftr[2].length != 1){
+ var whatTasksplit= equalaftr[2].split("&",2);
+ console.log(whatTasksplit);
+ var whatTask= whatTasksplit[1];
+ var whatTask2=equalaftr[3];
+ if(whatTask=="search"){
+  filter=whatTask2;
+  processChange();
+ }
+ else if(whatTask=="sortBy"){
+  var whatTask3=whatTask2.split("&",2);
+  var whatTask4=whatTask3[0];
+  console.log(whatTask4);
+  sortValue = whatTask4;
+  sortBit =true;
+  mySort();
+//sortChange();
+ }
+ console.log(whatTask);
+ console.log(whatTask2);
+ }
 
 }else if(equalaftr[0]=="search"){
   console.log("serach");
@@ -143,7 +162,8 @@ if(equalaftr[0]=="page"){
   console.log(finalSort);
 sortValue = finalSort;
 sortBit =true;
-mySort("");
+sortChange();
+//mySort("");
 
 }
     
@@ -260,12 +280,12 @@ if(input.value != ""){
   filter = input.value;
 }
   
-  //var searchUrl = "https://631f09a058a1c0fe9f5e599a.mockapi.io/blogs/"+`?page=${start}&limit=${show_per_page}`+`&search=${filter}`;
-var searchUrl = "https://631f09a058a1c0fe9f5e599a.mockapi.io/blogs/"+`?search=${filter}`;
-//console.log(searchUrl);
+  var searchUrl = "https://631f09a058a1c0fe9f5e599a.mockapi.io/blogs/"+`?page=${start}&limit=${show_per_page}`+`&search=${filter}`;
+//var searchUrl = "https://631f09a058a1c0fe9f5e599a.mockapi.io/blogs/"+`?search=${filter}`;
+console.log(searchUrl);
 
 displayLoading();
-var newurl = document.location.pathname +`?search=${filter}`;
+var newurl = document.location.pathname +`?page=${start}&limit=${show_per_page}`+`&search=${filter}`;
    var nxtstate={};
    var nxtTitle ="";
    window.history.pushState(nxtstate,nxtTitle,newurl);
@@ -295,19 +315,32 @@ fetch(searchUrl)
       table.deleteRow(tableHeaderRowCount);
   }
  }
+
+ const sortChange = debounce(() => mySort());
+function debounce(func, timeout = 300){
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => { func.apply(this, args); }, timeout);
+  };
+}
  
  function mySort(sortObj){
-  console.log(sortObj.value);
+  console.log(location.search);
+  //console.log(location.href);
+  //console.log(sortObj.value);
   if(!sortBit){
     console.log("chup");
    sortValue = sortObj.value;
   }
   if(sortValue!=""){
     console.log("chup1");
-var sortUrl="https://631f09a058a1c0fe9f5e599a.mockapi.io/blogs/"+`?sortBy=${sortValue}&order=desc`;
+    var sortUrl="https://631f09a058a1c0fe9f5e599a.mockapi.io/blogs/"+`?page=${start}&limit=${show_per_page}`+`&sortBy=${sortValue}&order=desc`; 
+//var sortUrl="https://631f09a058a1c0fe9f5e599a.mockapi.io/blogs/"+`?sortBy=${sortValue}&order=desc`;
 displayLoading();
 
-var newurl = document.location.pathname +`?sortBy=${sortValue}&order=desc`;
+var newurl = document.location.pathname+`?page=${start}&limit=${show_per_page}`+`&sortBy=${sortValue}&order=desc`;
+console.log(newurl);
   }else{
     clearTable();
    // fetchBlogs();
